@@ -4,6 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 import org.junit.Rule
@@ -18,17 +23,36 @@ class PlaylistViewModelShould {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val viewModel: PlaylistViewModel
     private val repository: PlayListRepository = mock()
+    private val playlists = mock<List<Playlist>>()
+    private val expected = Result.success(playlists)
 
-    init {
-        viewModel = PlaylistViewModel(repository)
-    }
 
     @Test
-    fun getPlayListFromRepository() {
+    fun getPlayListFromRepository() = runBlockingTest {
+        runBlocking {
+            whenever(repository.getPlayLists()).thenReturn(
+                flow {
+                    emit(expected)
+                }
+            )
+        }
+        val viewModel = PlaylistViewModel(repository)
         viewModel.playlist.getValueForTest()
 
         verify(repository, times(1)).getPlayLists()
+    }
+
+    @Test
+    fun emitsPlaylistFromRepository() {
+        runBlocking {
+            whenever(repository.getPlayLists()).thenReturn(
+                flow {
+                    emit(expected)
+                }
+            )
+        }
+        val viewModel = PlaylistViewModel(repository)
+        assertEquals(expected, viewModel.playlist.getValueForTest())
     }
 }
