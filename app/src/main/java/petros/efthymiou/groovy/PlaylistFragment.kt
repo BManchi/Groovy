@@ -14,6 +14,7 @@ class PlaylistFragment : Fragment() {
 
     private lateinit var viewModel: PlaylistViewModel
     private lateinit var viewModelFactory: PlayslistViewModelFactory
+    private val repository = PlayListRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        viewModelFactory = PlayslistViewModelFactory()
+        viewModelFactory = PlayslistViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(PlaylistViewModel::class.java)
     }
 

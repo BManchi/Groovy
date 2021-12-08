@@ -3,8 +3,10 @@ package petros.efthymiou.groovy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class PlayslistViewModelFactory : ViewModelProvider.Factory {
+class PlayslistViewModelFactory(
+    private val repository: PlayListRepository
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return PlaylistViewModel() as T
+        return PlaylistViewModel(repository) as T
     }
 }
