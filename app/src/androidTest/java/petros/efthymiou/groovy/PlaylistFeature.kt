@@ -17,8 +17,6 @@ import org.hamcrest.core.AllOf.allOf
 
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
@@ -35,6 +33,10 @@ class PlaylistFeature {
 
     @Test
     fun displaysLIstOfPlaylist() {
+
+        // Antipattern, to refactor later with espresso resources
+        Thread.sleep(4000)
+
         assertRecyclerViewItemCount(R.id.playlists_list, 10)
 
         onView(allOf(withId(R.id.playlist_name), isDescendantOfA(nthChildOf(withId(R.id.playlists_list), 0))))
@@ -67,5 +69,4 @@ class PlaylistFeature {
             }
         }
     }
-
 }
